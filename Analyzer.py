@@ -1,8 +1,12 @@
 # The mongo client
 from logging import getLogger
+
+import angriness_analyzer
+import clumsiness_analyzer
 import mongo_utils as mongo
 
 import shopaholic_analyzer
+import social_network_analyzer
 
 # ------------------------------------------ Globals
 # Logger
@@ -13,8 +17,9 @@ g_module_logger = getLogger('analyzer.main')
 def analyze():
 	while True:
 		shopaholic_analyzer.analyze()
-
-
+		social_network_analyzer.analyze()
+		clumsiness_analyzer.analyze()
+		angriness_analyzer.analyze()
 # ------------------------------------------ Main
 def main():
 	# Create DB
