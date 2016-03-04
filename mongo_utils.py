@@ -58,3 +58,7 @@ def get_user_ids():
 
 def get_user_docs_from_collection(user_id, collection):
 	return list(g_db[collection].find({"userId": user_id}))
+
+
+def update_rank(user_id, index, score):
+	g_db["ranks"].update({"userId": user_id},{index: score}, upsert=True)
