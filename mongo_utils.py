@@ -48,3 +48,13 @@ def generate_collections():
 def init_db():
 	init_mongo_client()
 	generate_collections()
+
+
+# Return all user ids in the system
+def get_user_ids():
+	user_ids_docs = list(g_db["users"].find({}, {"user_id": True, "_id": False}))
+	return map(lambda doc: doc["user_id"], user_ids_docs)
+
+
+def get_user_docs_from_collection(user_id, collection):
+	return list(g_db[collection].find({"userId": user_id}))
