@@ -36,7 +36,7 @@ def generate_collection(collection_name, capped):
 
 
 def generate_collections():
-	collections = ["GpsInfo", "AppsInfo"]
+	collections = ["users", "GpsInfo", "AppsInfo", "ranks"]
 
 	capped_collections = []
 
@@ -45,15 +45,20 @@ def generate_collections():
 	map(lambda collection_name: generate_collection(collection_name, capped=True), capped_collections)
 
 
+def generate_indexes():
+	g_db["ranks"].create_index(("userId", pymongo.ASCENDING), unique=True)
+
+
 def init_db():
 	init_mongo_client()
 	generate_collections()
+	generate_indexes()
 
 
 # Return all user ids in the system
 def get_user_ids():
-	user_ids_docs = list(g_db["users"].find({}, {"user_id": True, "_id": False}))
-	return map(lambda doc: doc["user_id"], user_ids_docs)
+	user_ids_docs = list(g_db["users"].find({}, {"userId": True, "_id": False}))
+	return map(lambda doc: doc["userId"], user_ids_docs)
 
 
 def get_user_docs_from_collection(user_id, collection):
@@ -61,4 +66,5 @@ def get_user_docs_from_collection(user_id, collection):
 
 
 def update_rank(user_id, index, score):
-	g_db["ranks"].update({"userId": user_id},{index: score}, upsert=True)
+	g_db["ranks"].update({"userId": user_id},
+	                     {"$set": {"userId": user_id, index: score}}, upsert=True)
