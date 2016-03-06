@@ -46,14 +46,9 @@ def generate_collections():
 	map(lambda collection_name: generate_collection(collection_name, capped=True), capped_collections)
 
 
-def generate_indexes():
-	g_db["query-result"].create_index(("userId", pymongo.ASCENDING), unique=True)
-
-
 def init_db():
 	init_mongo_client()
 	generate_collections()
-	generate_indexes()
 
 
 # Return all user ids in the system

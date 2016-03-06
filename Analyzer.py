@@ -1,6 +1,8 @@
 # The mongo client
 from logging import getLogger
 
+import time
+
 import angriness_analyzer
 import clumsiness_analyzer
 import mongo_utils as mongo
@@ -14,12 +16,10 @@ g_module_logger = getLogger('analyzer.main')
 
 # ------------------------------------------ Functions
 def analyze_all():
-	while True:
-		shopaholic_analyzer.analyze()
-		social_network_analyzer.analyze()
-		clumsiness_analyzer.analyze()
-		angriness_analyzer.analyze()
-
+	shopaholic_analyzer.analyze()
+	social_network_analyzer.analyze()
+	clumsiness_analyzer.analyze()
+	angriness_analyzer.analyze()
 
 # ------------------------------------------ Main
 def main():
