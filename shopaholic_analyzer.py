@@ -1,8 +1,8 @@
 from __future__ import division
 import mongo_utils as mongo
-
+import constants
 g_shopping_apps = ['ebay', 'amazon', 'aliexpress', 'zap', 'dealextreme', 'groupon', 'yad2', 'wish', 'you', 'chinabuy',
-					'etsy', 'asos', 'bigdeal']
+                   'etsy', 'asos', 'bigdeal']
 
 
 def calculate_apps_score(user_id):
@@ -28,6 +28,7 @@ def calculate_apps_score(user_id):
 		# In case n_all_apps == 0
 		return 0
 
+
 def calculate_gps_score(user_id):
 	# Get the user's docs from GpsInfo collection
 	docs_to_analyze = mongo.get_user_docs_from_collection(user_id, "GpsInfo")
@@ -48,15 +49,14 @@ def calculate_gps_score(user_id):
 	try:
 		return n_stores / n_all_places
 	except:
-		# In case the n_all_plcaces == 0
+		# In case the n_all_places == 0
 		return 0
 
 
 def analyze():
-	mongo.init_mongo_client()
 	user_ids = mongo.get_user_ids()
 	for user_id in user_ids:
 		gps_score = calculate_gps_score(user_id)
 		apps_score = calculate_apps_score(user_id)
 		total_score = 0.3 * apps_score + 0.7 * gps_score
-		mongo.update_rank(user_id, "shopaholic", total_score)
+		mongo.update_rank(user_id, constants.SHOPAHOLIC, total_score)

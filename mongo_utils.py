@@ -1,4 +1,5 @@
 # Mongo client
+from datetime import time
 from logging import getLogger
 
 import pymongo
@@ -16,7 +17,7 @@ g_db = None
 # initialize the mongo client
 def init_mongo_client():
 	global g_mongo_client, g_db
-	g_mongo_client = pymongo.MongoClient()
+	g_mongo_client = pymongo.MongoClient("mongodb://mot:mot@ds039165.mongolab.com:39165/mirror")
 
 	g_db = g_mongo_client['mirror']
 
@@ -66,5 +67,11 @@ def get_user_docs_from_collection(user_id, collection):
 
 
 def update_rank(user_id, index, score):
-	g_db["ranks"].update({"userId": user_id},
-	                     {"$set": {"userId": user_id, index: score}}, upsert=True)
+	doc_to_insert = {
+		"queryId": index,
+		"userId": user_id,
+		"rank": score,
+		"date": time.time(),
+		"feedback": -1
+	}
+	g_db["ranks"].insert(doc_to_insert)
