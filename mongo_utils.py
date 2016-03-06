@@ -37,7 +37,7 @@ def generate_collection(collection_name, capped):
 
 
 def generate_collections():
-	collections = ["users", "GpsInfo", "AppsInfo", "ranks"]
+	collections = ["users", "GpsInfo", "AppsInfo", "query-result"]
 
 	capped_collections = []
 
@@ -47,7 +47,7 @@ def generate_collections():
 
 
 def generate_indexes():
-	g_db["ranks"].create_index(("userId", pymongo.ASCENDING), unique=True)
+	g_db["query-result"].create_index(("userId", pymongo.ASCENDING), unique=True)
 
 
 def init_db():
@@ -74,4 +74,4 @@ def update_rank(user_id, index, score):
 		"date": time.time(),
 		"feedback": -1
 	}
-	g_db["ranks"].insert(doc_to_insert)
+	g_db["query-result"].insert(doc_to_insert)
