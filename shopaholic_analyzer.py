@@ -8,7 +8,7 @@ g_shopping_apps = ['ebay', 'amazon', 'aliexpress', 'zap', 'dealextreme', 'groupo
 def calculate_apps_score(user_id):
 	# Get the user's docs from AppsData collection
 	docs_to_analyze = mongo.get_user_docs_from_collection(user_id, "AppData")
-	print "docs_to_analyze", docs_to_analyze
+
 	# extract the Apps
 	only_apps = map(lambda doc: doc['appName'], docs_to_analyze)
 
