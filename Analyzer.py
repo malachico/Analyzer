@@ -1,8 +1,6 @@
 # The mongo client
 from logging import getLogger
 
-import time
-
 import angriness_analyzer
 import clumsiness_analyzer
 import mongo_utils as mongo
@@ -21,11 +19,12 @@ def analyze_all():
 	clumsiness_analyzer.analyze()
 	angriness_analyzer.analyze()
 
+
 # ------------------------------------------ Main
 def main():
 	# Create DB
 	g_module_logger.info("Analyzer starting...")
-	mongo.init_db()
+	mongo.init_mongo_client()
 	g_module_logger.info("DB initialized, start analyzing...")
 	analyze_all()
 

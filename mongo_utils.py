@@ -1,5 +1,5 @@
 # Mongo client
-from datetime import time
+import time
 from logging import getLogger
 
 import pymongo
@@ -22,39 +22,10 @@ def init_mongo_client():
 	g_db = g_mongo_client['mirror']
 
 
-def generate_collection(collection_name, capped):
-	try:
-		if capped:
-			g_mongo_client.sf.create_collection(collection_name,
-			                                    capped=True,
-			                                    size=1 * 1024 * 1024 * 1024,
-			                                    max=500000)
-		else:
-			g_mongo_client.sf.create_collection(collection_name)
-
-	except (pymongo.errors.CollectionInvalid, pymongo.errors.OperationFailure):
-		pass
-
-
-def generate_collections():
-	collections = ["users", "GpsInfo", "AppsInfo", "query-result"]
-
-	capped_collections = []
-
-	# For each name create collection in the @g_db
-	map(lambda collection_name: generate_collection(collection_name, capped=False), collections)
-	map(lambda collection_name: generate_collection(collection_name, capped=True), capped_collections)
-
-
-def init_db():
-	init_mongo_client()
-	generate_collections()
-
-
 # Return all user ids in the system
 def get_user_ids():
-	user_ids_docs = list(g_db["users"].find({}, {"userId": True, "_id": False}))
-	return map(lambda doc: doc["userId"], user_ids_docs)
+	user_ids_docs = list(g_db["user"].find({}, {"_id": True}))
+	return map(lambda doc: str(doc["_id"]), user_ids_docs)
 
 
 def get_user_docs_from_collection(user_id, collection):
@@ -69,4 +40,4 @@ def update_rank(user_id, index, score):
 		"date": time.time(),
 		"feedback": -1
 	}
-	g_db["query-result"].insert(doc_to_insert)
+	g_db["QueryResult"].insert(doc_to_insert)
