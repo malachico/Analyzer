@@ -2,7 +2,7 @@ from __future__ import division
 import mongo_utils as mongo
 import constants
 g_shopping_apps = ['ebay', 'amazon', 'aliexpress', 'zap', 'dealextreme', 'groupon', 'yad2', 'wish', 'you', 'chinabuy',
-                   'etsy', 'asos', 'bigdeal']
+					'etsy', 'asos', 'bigdeal']
 
 
 def calculate_apps_score(user_id):
@@ -53,10 +53,15 @@ def calculate_gps_score(user_id):
 		return 0
 
 
+def get_user_feedback(user_id):
+	return mongo.get_user_feedback(user_id, "shopaholic")
+
+
 def analyze():
 	user_ids = mongo.get_user_ids()
 	for user_id in user_ids:
 		gps_score = calculate_gps_score(user_id)
 		apps_score = calculate_apps_score(user_id)
-		total_score = 0.3 * apps_score + 0.7 * gps_score
+		user_feedback = get_user_feedback(user_id)
+		total_score = 0.25 * apps_score + 0.65 * gps_score + 0.1 * user_feedback
 		mongo.update_rank(user_id, constants.SHOPAHOLIC, total_score)

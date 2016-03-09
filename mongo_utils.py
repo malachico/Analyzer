@@ -7,8 +7,10 @@ import pymongo
 # ------------------------ Globals
 # Logger
 g_module_logger = getLogger('analyzer.main')
+
 # DB client
 g_mongo_client = None
+
 # DB
 g_db = None
 
@@ -32,12 +34,16 @@ def get_user_docs_from_collection(user_id, collection):
 	return list(g_db[collection].find({"userId": user_id}))
 
 
+def get_user_feedback(user_id, index):
+	return g_db["feedbacks"].find({"userId": user_id})[index]
+
+
 def update_rank(user_id, index, score):
 	doc_to_insert = {
 		"queryId": index,
 		"userId": user_id,
 		"rank": score,
 		"date": time.time(),
-		"feedback": -1
-	}
+		}
 	g_db["QueryResult"].insert(doc_to_insert)
+
